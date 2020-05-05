@@ -1,0 +1,3 @@
+spring.security.user:
+  name: secTester
+  password: SecTester

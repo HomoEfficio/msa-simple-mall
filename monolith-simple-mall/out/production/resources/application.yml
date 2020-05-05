@@ -1,0 +1,30 @@
+server:
+  port: 8443
+  ssl:
+    key-store-type: PKCS12
+    key-store: classpath:keystore/monolith.p12
+    key-store-password: monolith
+    key-alias: localhost
+  tomcat:
+    max-threads: 1
+
+spring:
+  jpa:
+    show-sql: true
+    open-in-view: false
+
+logging:
+  level:
+    io.homo_efficio: DEBUG
+
+---
+spring.profiles: docker
+
+server:
+  port: 8080
+  tomcat:
+    max-threads: 200
+
+spring:
+  jpa:
+    show-sql: false
