@@ -3,7 +3,6 @@ package io.homo_efficio.monolith.simple_mall.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.homo_efficio.monolith.simple_mall.dto.SellerIn;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -20,11 +19,9 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.util.stream.Stream;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * MockMvc 테스트에서는 별도로 설정해주지 않으면 Filter 는 적용되지 않는다.
@@ -112,11 +109,49 @@ class SellerControllerTest {
     }
 
 
-    @Test
-    void delete() {
+    @ParameterizedTest(name = "판매자 [{0} - {1} - {2} - {3} - {4}] 생성 후 {3} 삭제")
+    @MethodSource("deletingSellers")
+    void deleteSellers(String name, String email, String phone, String loginId, String password) throws Exception {
+        postNewSeller(name, email, phone, loginId, password);
+
+        mvc.perform(
+                delete("/v1/sellers?loginId=" + loginId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string(loginId));
     }
 
-    @Test
-    void findByLoginId() {
+    private static Stream<Arguments> deletingSellers() {
+        return Stream.of(
+                Arguments.of("마이크로서비스학생1", "user1@test.com", "010-1111-1111", "user1", "p123456"),
+                Arguments.of("a", "ab@t.c", "123456789", "login", "passwd"),
+                Arguments.of("열글자로된판매자이름", "aaaaaaaaaabbbbbbbbbbcccccccccc@dddddddd.eeeeeeeeee", "12345678901234567890", "aaaaaaaaaabbbbbbbbbbcccccccccc", "abcde12345abcde12345")
+        );
+    }
+
+    @ParameterizedTest(name = "판매자 [{0} - {1} - {2} - {3} - {4}] 생성 후 {3} 검색")
+    @MethodSource("findingSellers")
+    void findByLoginId(String name, String email, String phone, String loginId, String password) throws Exception {
+        postNewSeller(name, email, phone, loginId, password);
+
+        mvc.perform(
+                get("/v1/sellers?loginId=" + loginId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("loginId").value(loginId))
+                .andExpect(jsonPath("name").value(name))
+                .andExpect(jsonPath("email").value(email))
+                .andExpect(jsonPath("phone").value(phone))
+        ;
+    }
+
+    private static Stream<Arguments> findingSellers() {
+        return Stream.of(
+                Arguments.of("마이크로서비스학생1", "user1@test.com", "010-1111-1111", "user1", "p123456"),
+                Arguments.of("a", "ab@t.c", "123456789", "login", "passwd"),
+                Arguments.of("열글자로된판매자이름", "aaaaaaaaaabbbbbbbbbbcccccccccc@dddddddd.eeeeeeeeee", "12345678901234567890", "aaaaaaaaaabbbbbbbbbbcccccccccc", "abcde12345abcde12345")
+        );
     }
 }
