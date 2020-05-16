@@ -31,6 +31,9 @@ public class Product extends BaseEntity {
 
     private String description;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    private Seller seller;
+
     private String manufacturer;
 
     @NotNull
@@ -44,6 +47,7 @@ public class Product extends BaseEntity {
     private Product(Product.Builder builder) {
         name = builder.name;
         description = builder.description;
+        seller = builder.seller;
         manufacturer = builder.manufacturer;
         price = builder.price;
         count = builder.count;
@@ -75,14 +79,16 @@ public class Product extends BaseEntity {
     public static class Builder {
 
         private final String name;
+        private final Seller seller;
         private final Price price;
         private final Long count;
 
         private String description;
         private String manufacturer;
 
-        public Builder(String name, Price price, Long count) {
+        public Builder(String name, Seller seller, Price price, Long count) {
             this.name = name;
+            this.seller = seller;
             this.price = price;
             this.count = count;
         }
