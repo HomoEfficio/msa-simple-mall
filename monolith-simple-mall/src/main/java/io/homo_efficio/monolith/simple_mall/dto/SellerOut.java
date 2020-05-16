@@ -18,6 +18,14 @@ public class SellerOut {
     private final String email;
     private final String phone;
 
+    // Only for JacksonTester, DON'T use for production code
+    public SellerOut() {
+        this.loginId = null;
+        this.name = null;
+        this.email = null;
+        this.phone = null;
+    }
+
     public static SellerOut from(Seller seller) {
         return new SellerOut(
                 seller.getLoginId(),
