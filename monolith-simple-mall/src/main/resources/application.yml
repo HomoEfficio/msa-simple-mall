@@ -1,12 +1,26 @@
+server:
+  port: 8080
+  tomcat:
+    threads:
+      max: 1
+
 spring:
   jpa:
     show-sql: true
     open-in-view: false
 
+logging:
+  level:
+    io.homo_efficio: DEBUG
+
 ---
 spring.profiles: docker
 
-server.port: 8080
+server:
+  port: 8080
+  tomcat:
+    threads:
+      max: 200
 
 spring:
   jpa:
