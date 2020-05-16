@@ -2,3 +2,7 @@ spring:
   jpa:
     show-sql: true
     open-in-view: false
+
+spring.security.user:
+  name: secTester
+  password: SecTester
