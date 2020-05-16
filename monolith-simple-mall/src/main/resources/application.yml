@@ -2,3 +2,12 @@ spring:
   jpa:
     show-sql: true
     open-in-view: false
+
+---
+spring.profiles: docker
+
+server.port: 8080
+
+spring:
+  jpa:
+    show-sql: false
