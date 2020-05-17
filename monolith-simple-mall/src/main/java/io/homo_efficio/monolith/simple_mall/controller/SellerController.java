@@ -7,6 +7,7 @@ import io.homo_efficio.monolith.simple_mall.dto.SellerIn;
 import io.homo_efficio.monolith.simple_mall.dto.SellerOut;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,10 +22,11 @@ import org.springframework.web.bind.annotation.*;
 public class SellerController {
 
     private final SellerRepository sellerRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @PostMapping
     public ResponseEntity<SellerOut> create(@RequestBody SellerIn sellerIn) {
-        return ResponseEntity.ok(SellerOut.from(sellerRepository.save(sellerIn.toEntity())));
+        return ResponseEntity.ok(SellerOut.from(sellerRepository.save(sellerIn.toEntityWithPasswordEncoder(passwordEncoder))));
     }
 
     @PutMapping
@@ -32,7 +34,7 @@ public class SellerController {
         Seller seller = sellerRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new EntityNotFoundException(Seller.class,
                         String.format("판매자 [%s] 는 존재하지 않습니다.", loginId)));
-        sellerIn.updateEntity(seller);
+        sellerIn.updateEntityWithPasswordEncoder(seller, passwordEncoder);
         return ResponseEntity.ok(SellerOut.from(seller));
     }
 

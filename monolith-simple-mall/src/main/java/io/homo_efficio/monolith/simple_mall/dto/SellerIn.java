@@ -2,6 +2,7 @@ package io.homo_efficio.monolith.simple_mall.dto;
 
 import io.homo_efficio.monolith.simple_mall.domain.Seller;
 import lombok.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -40,14 +41,14 @@ public class SellerIn {
     private String password;
 
 
-    public Seller toEntity() {
-        return new Seller(null, name, email, loginId, password, phone);
+    public Seller toEntityWithPasswordEncoder(PasswordEncoder passwordEncoder) {
+        return new Seller(null, name, email, loginId, passwordEncoder.encode(password), phone);
     }
 
-    public void updateEntity(Seller seller) {
+    public void updateEntityWithPasswordEncoder(Seller seller, PasswordEncoder passwordEncoder) {
         seller.setName(name);
         seller.setEmail(email);
-        seller.setPassword(password);
+        seller.setPassword(passwordEncoder.encode(password));
         seller.setPhone(phone);
     }
 }
