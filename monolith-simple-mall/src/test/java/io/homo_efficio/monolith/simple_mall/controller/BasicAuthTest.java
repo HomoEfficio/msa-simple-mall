@@ -1,10 +1,12 @@
 package io.homo_efficio.monolith.simple_mall.controller;
 
 import io.homo_efficio.monolith.simple_mall._config.MessageConfig;
+import io.homo_efficio.monolith.simple_mall.domain.repository.SellerRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -23,6 +25,9 @@ public class BasicAuthTest {
 
     @Autowired
     private MockMvc mvc;
+
+    @MockBean
+    private SellerRepository sellerRepository;
 
     @DisplayName("Basic Auth 인증 정보를 헤더에 담아 / 로 요청을 보내면 인증을 통과하고 200 OK 반환")
     @Test

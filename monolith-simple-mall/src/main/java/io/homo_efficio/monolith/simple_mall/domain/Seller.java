@@ -41,7 +41,7 @@ public class Seller extends BaseEntity {
     private String loginId;
 
     @NotNull
-    @Column(length = 30)
+    @Column(length = 70)
     @Setter
     private String password;
 
