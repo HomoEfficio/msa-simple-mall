@@ -111,109 +111,23 @@ public class ProductControllerTest {
     }
 
     private static Stream<Arguments> updatedProducts() {
-        return Stream.of(
-                Arguments.of("상품 101", "Seller01", "p123456", BigDecimal.valueOf(10_000L), 111L,
-                        new ProductIn(
-                                "상품 101",
-                                "상품 101 설명",
-                                "Seller01",
-                                "manufacturer" + (int) (Math.random() * 100),
-                                BigDecimal.valueOf(10_000L),
-                                111L)),
-                Arguments.of("상품 102", "Seller01", "p123456", BigDecimal.valueOf(20_000L), 222L,
-                        new ProductIn(
-                                "상품 102",
-                                "상품 102 설명",
-                                "Seller01",
-                                "manufacturer" + (int) (Math.random() * 100),
-                                BigDecimal.valueOf(20_000L),
-                                222L)),
-                Arguments.of("상품 103", "Seller01", "p123456", BigDecimal.valueOf(30_000L), 333L,
-                        new ProductIn(
-                                "상품 103",
-                                "상품 103 설명",
-                                "Seller01",
-                                "manufacturer" + (int) (Math.random() * 100),
-                                BigDecimal.valueOf(30_000L),
-                                333L)),
-
-                Arguments.of("상품 201", "Seller02", "passwd", BigDecimal.valueOf(10_000L), 111L,
-                        new ProductIn(
-                                "상품 201",
-                                "상품 201 설명",
-                                "Seller02",
-                                "manufacturer" + (int) (Math.random() * 100),
-                                BigDecimal.valueOf(10_000L),
-                                111L)),
-                Arguments.of("상품 202", "Seller02", "passwd", BigDecimal.valueOf(20_000L), 222L,
-                        new ProductIn(
-                                "상품 202",
-                                "상품 202 설명",
-                                "Seller02",
-                                "manufacturer" + (int) (Math.random() * 200),
-                                BigDecimal.valueOf(20_000L),
-                                222L)),
-                Arguments.of("상품 203", "Seller02", "passwd", BigDecimal.valueOf(30_000L), 333L,
-                        new ProductIn(
-                                "상품 203",
-                                "상품 203 설명",
-                                "Seller03",
-                                "manufacturer" + (int) (Math.random() * 300),
-                                BigDecimal.valueOf(30_000L),
-                                333L)),
-
-                Arguments.of("상품 301", "Seller03", "abcde12345abcde12345", BigDecimal.valueOf(10_000L), 111L,
-                        new ProductIn(
-                                "상품 301",
-                                "상품 301 설명",
-                                "Seller03",
-                                "manufacturer" + (int) (Math.random() * 100),
-                                BigDecimal.valueOf(10_000L),
-                                111L)),
-                Arguments.of("상품 302", "Seller03", "abcde12345abcde12345", BigDecimal.valueOf(20_000L), 222L,
-                        new ProductIn(
-                                "상품 302",
-                                "상품 302 설명",
-                                "Seller03",
-                                "manufacturer" + (int) (Math.random() * 100),
-                                BigDecimal.valueOf(20_000L),
-                                222L)),
-                Arguments.of("상품 303", "Seller03", "abcde12345abcde12345", BigDecimal.valueOf(30_000L), 333L,
-                        new ProductIn(
-                                "상품 303",
-                                "상품 303 설명",
-                                "Seller03",
-                                "manufacturer" + (int) (Math.random() * 100),
-                                BigDecimal.valueOf(30_000L),
-                                333L))
-        );
-
-//        return products()
-//                .map(Arguments::get)
-//                .map(pArr -> {
-//                    return Arguments.of(pArr,
-//                            new ProductIn(
-//                                    pArr[0].toString(),
-//                                    pArr[0].toString() + " 설명",
-//                                    pArr[1].toString(),
-//                                    "manufacturer" + (int) (Math.random() * 100),
-//                                    (BigDecimal)pArr[2],
-//                                    (long)pArr[3]));
-//                });
-
-//        List<Arguments> updatedProducts = new ArrayList<>();
-//        List<Arguments> args = products().collect(Collectors.toList());
-//        for (Arguments arg : args) {
-//            Object[] p = arg.get();
-//            updatedProducts.add(Arguments.of(p, new ProductIn(
-//                    p[0].toString(),
-//                    p[0].toString() + " 설명",
-//                    p[1].toString(),
-//                    "manufacturer" + (int) (Math.random() * 100),
-//                    (BigDecimal)p[2],
-//                    (long)p[3])));
-//        }
-//        return updatedProducts.stream();
+        return products()
+                .map(Arguments::get)
+                .map(pArr -> {
+                    String name = pArr[0].toString();
+                    String sellerLoginId = pArr[1].toString();
+                    String password = pArr[2].toString();
+                    BigDecimal price = (BigDecimal) pArr[3];
+                    long count = (long) pArr[4];
+                    return Arguments.of(name, sellerLoginId, password, price, count,
+                            new ProductIn(
+                                    name,
+                                    name + " 설명",
+                                    sellerLoginId,
+                                    "manufacturer" + (int) (Math.random() * 100),
+                                    price,
+                                    count));
+                });
     }
 
     private static Stream<Arguments> products() {
