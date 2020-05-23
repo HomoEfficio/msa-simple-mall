@@ -1,6 +1,7 @@
 package io.homo_efficio.monolith.simple_mall.controller;
 
 import io.homo_efficio.monolith.simple_mall._config.MessageConfig;
+import io.homo_efficio.monolith.simple_mall.domain.repository.CustomerRepository;
 import io.homo_efficio.monolith.simple_mall.domain.repository.SellerRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,6 +29,9 @@ public class BasicAuthTest {
 
     @MockBean
     private SellerRepository sellerRepository;
+
+    @MockBean
+    private CustomerRepository customerRepository;
 
     @DisplayName("Basic Auth 인증 정보를 헤더에 담아 / 로 요청을 보내면 인증을 통과하고 200 OK 반환")
     @Test
