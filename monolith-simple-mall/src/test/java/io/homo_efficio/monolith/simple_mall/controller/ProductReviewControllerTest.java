@@ -2,10 +2,7 @@ package io.homo_efficio.monolith.simple_mall.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.homo_efficio.monolith.simple_mall.dto.ProductReviewIn;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -28,6 +25,7 @@ import java.util.stream.Stream;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -103,5 +101,36 @@ class ProductReviewControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(productReviewInTester.write(new ProductReviewIn(productId, customerId, comment)).getJson()));
+    }
+
+    @DisplayName("상품 리뷰 총 5건 등록 후 고객1 등록 리뷰만 조회")
+    @Test
+    public void findAll() throws Exception {
+        Stream<Arguments> argumentsStream = productReviews();
+        argumentsStream.forEach(arg -> {
+            Object[] reviewCols = arg.get();
+            Long productId = (long) reviewCols[0];
+            Long customerId = (long) reviewCols[1];
+            String customerLoginId = reviewCols[2].toString();
+            String password = reviewCols[3].toString();
+            String comment = reviewCols[4].toString();
+            try {
+                postNewProductReview(productId, customerId, customerLoginId, password, comment);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        mvc.perform(get("/v1/product-reviews")
+                .with(httpBasic("aaaaaaaaaabbbbbbbbbbcccccccccc", "abcde12345abcde12345"))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .param("customer", "1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("content").isArray())
+                .andExpect(jsonPath("content").isNotEmpty())
+                .andExpect(jsonPath("totalElements").value(3))
+                .andExpect(jsonPath("totalPages").value(1))
+        ;
     }
 }
