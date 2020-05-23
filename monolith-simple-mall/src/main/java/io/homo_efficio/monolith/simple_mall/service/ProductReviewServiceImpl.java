@@ -9,6 +9,8 @@ import io.homo_efficio.monolith.simple_mall.domain.repository.ProductReviewRepos
 import io.homo_efficio.monolith.simple_mall.dto.ProductReviewIn;
 import io.homo_efficio.monolith.simple_mall.dto.ProductReviewOut;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,17 +51,21 @@ public class ProductReviewServiceImpl implements ProductReviewService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ProductReviewOut findById(Long id) {
         return null;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ProductReviewOut> findAllByProductId(Long productId) {
         return null;
     }
 
     @Override
-    public List<ProductReviewOut> findAllByCustomerId(Long customerId) {
-        return null;
+    @Transactional(readOnly = true)
+    public Page<ProductReviewOut> findAllByCustomerId(Long customerId, Pageable pageable) {
+        return prRepository.findAllByCustomer_Id(customerId, pageable)
+                .map(ProductReviewOut::from);
     }
 }

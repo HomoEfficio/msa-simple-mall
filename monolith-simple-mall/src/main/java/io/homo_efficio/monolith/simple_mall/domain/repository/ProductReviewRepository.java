@@ -1,6 +1,8 @@
 package io.homo_efficio.monolith.simple_mall.domain.repository;
 
 import io.homo_efficio.monolith.simple_mall.domain.ProductReview;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -16,5 +18,5 @@ public interface ProductReviewRepository extends JpaRepository<ProductReview, Lo
     Optional<ProductReview> findByProduct_IdAndCustomer_Id(Long productId, Long customerId);
 
     List<ProductReview> findAllByProduct_Id(Long productId);
-    List<ProductReview> findAllByCustomer_Id(Long customerId);
+    Page<ProductReview> findAllByCustomer_Id(Long customerId, Pageable pageable);
 }
