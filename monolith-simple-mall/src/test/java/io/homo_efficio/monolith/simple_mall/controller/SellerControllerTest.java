@@ -19,6 +19,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.util.stream.Stream;
 
+import static com.atlassian.oai.validator.mockmvc.OpenApiValidationMatchers.openApi;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -34,6 +35,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 class SellerControllerTest {
 
+    private static final String OPEN_API_3_JSON = "https://gist.githubusercontent.com/HomoEfficio/3c5b0e8187b251424494d3f4d10b5903/raw/9ff38177d316acd89d6de1d202791f90cc4ab3a1/open-api-3-for-msa-simple-mall.json";
+
     private MockMvc mvc;
 
     @Autowired
@@ -47,6 +50,7 @@ class SellerControllerTest {
         mvc = MockMvcBuilders.webAppContextSetup(ctx)
                 .addFilters(new CharacterEncodingFilter("UTF-8", true))
                 .alwaysDo(print())
+                .alwaysExpect(openApi().isValid(OPEN_API_3_JSON))
                 .build();
         JacksonTester.initFields(this, new ObjectMapper());
     }
