@@ -1,15 +1,15 @@
 openapi: 3.0.1
 info:
-  title: OpenAPI definition
+  title: Monolith Simple Mall
   version: v0
 servers:
 - url: "https://localhost:8443"
-  description: Generated server url
+  description: 서버 주소
 paths:
   /v1/customers:
     post:
       tags:
-      - customer-controller
+      - 고객 (Customer)
       operationId: create
       requestBody:
         content:
@@ -27,7 +27,7 @@ paths:
   /v1/product-reviews:
     get:
       tags:
-      - product-review-controller
+      - 상품 리뷰 (ProductReview)
       operationId: findAllByCustomerId
       parameters:
       - name: customer
@@ -50,7 +50,7 @@ paths:
                 $ref: "#/components/schemas/PageProductReviewOut"
     post:
       tags:
-      - product-review-controller
+        - 상품 리뷰 (ProductReview)
       operationId: create_1
       requestBody:
         content:
@@ -190,12 +190,17 @@ components:
       properties:
         zipNo:
           type: string
+          example: "22750"
+          description: 우편 번호
         roadAddrPart1:
           type: string
+          example: 인천 서구
         roadAddrPart2:
           type: string
+          example: 크리스탈로 148
         addrDetail:
           type: string
+          example: 한화꿈에그린
     CustomerIn:
       required:
       - email
@@ -209,35 +214,44 @@ components:
           maxLength: 90
           minLength: 1
           type: string
+          example: 뒤태지존
         email:
           maxLength: 50
           minLength: 6
           type: string
+          example: homo.efficio@gmail.com
         phone:
           maxLength: 20
           minLength: 9
           type: string
+          example: 010-8888-9999
         address:
           $ref: "#/components/schemas/Address"
         loginId:
           maxLength: 30
           minLength: 5
           type: string
+          example: HomoEfficio
         password:
           maxLength: 20
           minLength: 6
           type: string
+          example: pwd123+=
     CustomerOut:
       type: object
       properties:
         loginId:
           type: string
+          example: HomoEfficio
         name:
           type: string
+          example: 뒤태지존
         email:
           type: string
+          example: homo.efficio@gmail.com
         phone:
           type: string
+          example: 010-8888-9999
         address:
           $ref: "#/components/schemas/Address"
     ProductReviewIn:
