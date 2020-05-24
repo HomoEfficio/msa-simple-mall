@@ -14,6 +14,10 @@ spring:
     show-sql: true
     open-in-view: false
 
+springdoc:
+  swagger-ui:
+    url: https://gist.githubusercontent.com/HomoEfficio/d36c556dc6fe0e5cbe2b0cee81dadbb6/raw/7c1f30a70297f5290fce38090bdb90e280764010/open-api-3-for-msa-simple-mall.yaml
+
 logging:
   level:
     io.homo_efficio: DEBUG

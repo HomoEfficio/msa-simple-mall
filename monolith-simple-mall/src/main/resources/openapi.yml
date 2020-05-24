@@ -1,0 +1,417 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: "https://localhost:8443"
+  description: Generated server url
+paths:
+  /v1/customers:
+    post:
+      tags:
+      - customer-controller
+      operationId: create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CustomerIn"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CustomerOut"
+  /v1/product-reviews:
+    get:
+      tags:
+      - product-review-controller
+      operationId: findAllByCustomerId
+      parameters:
+      - name: customer
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PageProductReviewOut"
+    post:
+      tags:
+      - product-review-controller
+      operationId: create_1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductReviewIn"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProductReviewOut"
+  /v1/sellers:
+    get:
+      tags:
+      - seller-controller
+      operationId: findByLoginId
+      parameters:
+      - name: loginId
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/SellerOut"
+    put:
+      tags:
+      - seller-controller
+      operationId: update
+      parameters:
+      - name: loginId
+        in: query
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SellerIn"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/SellerOut"
+    post:
+      tags:
+      - seller-controller
+      operationId: create_2
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SellerIn"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/SellerOut"
+    delete:
+      tags:
+      - seller-controller
+      operationId: delete
+      parameters:
+      - name: loginId
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+  /v1/products/{id}:
+    put:
+      tags:
+      - product-controller
+      operationId: update_1
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductIn"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProductOut"
+  /v1/products:
+    post:
+      tags:
+      - product-controller
+      operationId: create_3
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductIn"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProductOut"
+components:
+  schemas:
+    Address:
+      type: object
+      properties:
+        zipNo:
+          type: string
+        roadAddrPart1:
+          type: string
+        roadAddrPart2:
+          type: string
+        addrDetail:
+          type: string
+    CustomerIn:
+      required:
+      - email
+      - loginId
+      - name
+      - password
+      - phone
+      type: object
+      properties:
+        name:
+          maxLength: 90
+          minLength: 1
+          type: string
+        email:
+          maxLength: 50
+          minLength: 6
+          type: string
+        phone:
+          maxLength: 20
+          minLength: 9
+          type: string
+        address:
+          $ref: "#/components/schemas/Address"
+        loginId:
+          maxLength: 30
+          minLength: 5
+          type: string
+        password:
+          maxLength: 20
+          minLength: 6
+          type: string
+    CustomerOut:
+      type: object
+      properties:
+        loginId:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        address:
+          $ref: "#/components/schemas/Address"
+    ProductReviewIn:
+      required:
+      - comment
+      - customerId
+      - productId
+      type: object
+      properties:
+        productId:
+          type: integer
+          format: int64
+        customerId:
+          type: integer
+          format: int64
+        comment:
+          type: string
+    ProductReviewOut:
+      type: object
+      properties:
+        productId:
+          type: integer
+          format: int64
+        productName:
+          type: string
+        customerId:
+          type: integer
+          format: int64
+        customerName:
+          type: string
+        comment:
+          type: string
+    Pageable:
+      type: object
+      properties:
+        offset:
+          type: integer
+          format: int64
+        sort:
+          $ref: "#/components/schemas/Sort"
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        paged:
+          type: boolean
+        unpaged:
+          type: boolean
+    Sort:
+      type: object
+      properties:
+        sorted:
+          type: boolean
+        unsorted:
+          type: boolean
+        empty:
+          type: boolean
+    PageProductReviewOut:
+      type: object
+      properties:
+        totalPages:
+          type: integer
+          format: int32
+        totalElements:
+          type: integer
+          format: int64
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProductReviewOut"
+        sort:
+          $ref: "#/components/schemas/Sort"
+        number:
+          type: integer
+          format: int32
+        numberOfElements:
+          type: integer
+          format: int32
+        first:
+          type: boolean
+        pageable:
+          $ref: "#/components/schemas/Pageable"
+        last:
+          type: boolean
+        empty:
+          type: boolean
+    SellerIn:
+      required:
+      - email
+      - loginId
+      - name
+      - password
+      - phone
+      type: object
+      properties:
+        name:
+          maxLength: 90
+          minLength: 1
+          type: string
+        email:
+          maxLength: 50
+          minLength: 6
+          type: string
+        phone:
+          maxLength: 20
+          minLength: 9
+          type: string
+        loginId:
+          maxLength: 30
+          minLength: 5
+          type: string
+        password:
+          maxLength: 20
+          minLength: 6
+          type: string
+    SellerOut:
+      type: object
+      properties:
+        loginId:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+    ProductIn:
+      required:
+      - count
+      - name
+      - price
+      - sellerLoginId
+      type: object
+      properties:
+        name:
+          maxLength: 150
+          minLength: 1
+          type: string
+        description:
+          maxLength: 255
+          minLength: 0
+          type: string
+        sellerLoginId:
+          type: string
+        manufacturer:
+          maxLength: 90
+          minLength: 0
+          type: string
+        price:
+          type: number
+        count:
+          type: integer
+          format: int64
+    ProductOut:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        description:
+          type: string
+        seller:
+          $ref: "#/components/schemas/SellerOut"
+        manufacturer:
+          type: string
+        price:
+          type: number
+        count:
+          type: integer
+          format: int64
