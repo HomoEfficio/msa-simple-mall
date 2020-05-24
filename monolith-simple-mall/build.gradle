@@ -1,6 +1,8 @@
 plugins {
     id 'org.springframework.boot' version '2.3.0.RELEASE'
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id 'com.github.johnrengelman.processes' version '0.5.0'
+    id 'org.springdoc.openapi-gradle-plugin' version '1.2.0'
     id 'java'
 }
 
@@ -53,4 +55,16 @@ dependencyManagement {
 
 test {
     useJUnitPlatform()
+}
+
+openApi {
+//    apiDocsUrl.set("https://localhost:8443/v3/api-docs")  // not work in https: https://github.com/springdoc/springdoc-openapi-gradle-plugin/issues/21
+    // json 방식 (default)
+//    apiDocsUrl.set("http://localhost:8080/v3/api-docs")
+//    outputFileName.set('openapi.json')
+    // yaml 방식
+    apiDocsUrl.set("http://localhost:8080/v3/api-docs.yaml")
+    outputFileName.set('openapi.yml')
+    outputDir.set(file("$buildDir/docs"))
+    waitTimeInSeconds.set(30)
 }

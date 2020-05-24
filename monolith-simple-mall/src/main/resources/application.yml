@@ -18,6 +18,18 @@ logging:
   level:
     io.homo_efficio: DEBUG
 
+
+
+---
+spring.profiles: open-api-gen
+
+server:
+  port: 8080
+  ssl:
+    enabled: false
+
+
+
 ---
 spring.profiles: docker
 
