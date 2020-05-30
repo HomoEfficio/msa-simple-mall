@@ -1,6 +1,7 @@
 package io.homo_efficio.monolith.simple_mall._common.exception.handler;
 
 import io.homo_efficio.monolith.simple_mall._common.exception.EntityNotFoundException;
+import io.homo_efficio.monolith.simple_mall._config.MessageConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RequiredArgsConstructor
 public class GlobalExceptionHandler {
 
+    private final MessageConfig.MessageResolver messageResolver;
+
     @ExceptionHandler(EntityNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<ErrorResponse> handleEntityNotFoundException(EntityNotFoundException e) {
@@ -26,11 +29,12 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse;
         if (e.getEntityId() == null) {
             errorResponse = ErrorResponse.of(ErrorCode.ENTITY_NOT_FOUND_WITH_NON_ID,
-                    e.getMessage(),
+                    messageResolver.getMessage(ErrorCode.ENTITY_NOT_FOUND_WITH_NON_ID.getErrorCode(), e.getMessage()),
                     ServletUriComponentsBuilder.fromCurrentRequestUri().toUriString());
         } else {
             errorResponse = ErrorResponse.of(ErrorCode.ENTITY_NOT_FOUND,
-                    e.getMessage(),
+                    messageResolver.getMessage(ErrorCode.ENTITY_NOT_FOUND.getErrorCode(),
+                            e.getEntityClassSimpleName(), e.getEntityId()),
                     ServletUriComponentsBuilder.fromCurrentRequestUri().toUriString());
         }
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
