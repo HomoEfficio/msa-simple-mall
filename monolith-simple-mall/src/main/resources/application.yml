@@ -37,12 +37,6 @@ server:
 ---
 spring.profiles: docker
 
-server:
-  port: 8080
-  tomcat:
-    threads:
-      max: 200
-
 spring:
   jpa:
     show-sql: false
