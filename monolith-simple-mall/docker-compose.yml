@@ -1,0 +1,30 @@
+version: '2.4'
+
+services:
+  mysql:
+    image: mysql:8.0.20
+    networks:
+      - my-network
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpwd
+      - MYSQL_DATABASE=monolith-simple-mall
+      - MYSQL_USER=
+      - MYSQL_PASSWORD=pwd
+    healthcheck:
+      test: "/usr/bin/mysql --user=user --password=pwd --execute \"SHOW DATABASES;\""
+      interval: 20s
+      timeout: 5s
+      retries: 10
+
+networks:
+  my-network:
+    name: my-network
+
+# docker-compose 명령
+# docker-compose build : docker-compose 에 포함된 서비스의 이미지 생성
+# docker-compose up -d : docker-compose 에 포함된 서비스의 이미지에서 컨테이너 생성 및 실행. -d: daemon
+# docker-compose logs -f -t 컨테이너ID : -d 로 실행돼서 볼 수 없는 로그를 호스트 화면에 표시
+# docker-compose stop : docker-compose 로 실행된 컨테이너 중지
+# docker-compose down : docker-compose stop + 컨테이너 삭제

@@ -9,6 +9,13 @@ server:
     threads:
       max: 1
 
+spring.jpa.hibernate.ddl-auto: create
+
+spring.datasource:
+  url: jdbc:mysql://localhost:3306/monolith-simple-mall
+  username: user
+  password: pwd
+
 spring:
   jpa:
     show-sql: true
@@ -36,6 +43,11 @@ server:
 
 ---
 spring.profiles: docker
+
+server:
+  tomcat:
+    threads:
+      max: 200
 
 spring:
   jpa:

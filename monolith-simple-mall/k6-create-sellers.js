@@ -13,7 +13,8 @@ const randomPhoneNumGen = () => {
 }
 
 export default function() {
-  const url = 'http://localhost:8080/v1/sellers';
+  // const url = 'http://localhost:8080/v1/sellers';
+  const url = 'https://localhost:8443/v1/sellers';
   const body = JSON.stringify({
     "name": randomStrGen(),
     "email": `${randomStrGen()}@test.com`,
@@ -36,4 +37,5 @@ export default function() {
 /*
 k6 설치: https://k6.io/docs/getting-started/installation
 실행: k6 run SCRIPT.js
+사설 인증서 사용 시 실행: k6 run --insecure-skip-tls-verify SCRIPT.js
  */
