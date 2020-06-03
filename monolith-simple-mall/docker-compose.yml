@@ -1,19 +1,19 @@
 version: '2.4'
 
 services:
-  mysql:
-    image: mysql:8.0.20
+  postgresql:
+    image: postgres:12-alpine
+    container_name: postgres
     networks:
       - my-network
     ports:
-      - "3306:3306"
+      - "5432:5432"
     environment:
-      - MYSQL_ROOT_PASSWORD=rootpwd
-      - MYSQL_DATABASE=monolith-simple-mall
-      - MYSQL_USER=
-      - MYSQL_PASSWORD=pwd
+      - POSTGRES_DB=monolith-simple-mall
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=pwd
     healthcheck:
-      test: "/usr/bin/mysql --user=user --password=pwd --execute \"SHOW DATABASES;\""
+      test: ["CMD-SHELL", "pg_isready -U user -d monolith-simple-mall"]
       interval: 20s
       timeout: 5s
       retries: 10
