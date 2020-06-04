@@ -13,8 +13,8 @@ const randomPhoneNumGen = () => {
 }
 
 export default function() {
-  // const url = 'http://localhost:8080/v1/sellers';
-  const url = 'https://localhost:8443/v1/sellers';
+  // const url = 'https://localhost:8443/v1/sellers';
+  const url = 'http://localhost:9000/v1/sellers';
   const body = JSON.stringify({
     "name": randomStrGen(),
     "email": `${randomStrGen()}@test.com`,
