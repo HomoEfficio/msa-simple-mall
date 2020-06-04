@@ -1,0 +1,11 @@
+server:
+  port: 9000
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: monolith-simple-mall
+          uri: http://localhost:8080/
+          predicates:
+            - Path=/v1/**
