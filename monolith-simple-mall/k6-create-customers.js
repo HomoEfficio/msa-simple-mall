@@ -16,7 +16,8 @@ const randomZipNoGen = () => {
 }
 
 export default function() {
-  const url = 'http://localhost:8080/v1/customers';
+  // const url = 'http://localhost:8080/v1/customers';
+  const url = 'http://localhost:9000/v1/customers';
   const body = JSON.stringify({
     "name": randomStrGen(),
     "email": `${randomStrGen()}@test.com`,
