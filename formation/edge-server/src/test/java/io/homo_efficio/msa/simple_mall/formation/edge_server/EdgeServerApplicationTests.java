@@ -2,7 +2,7 @@ package io.homo_efficio.msa.simple_mall.formation.edge_server;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
-import lombok.Data;
+import io.homo_efficio.msa.simple_mall.formation.edge_server.auth.Seller;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -57,6 +57,7 @@ class EdgeServerApplicationTests {
     @DisplayName("인증 없이 Seller를 등록하면 200이 반환된다.")
     @Test
     void createSeller() {
+
         wireMockServer.stubFor(
                 WireMock.post(WireMock.urlEqualTo("/v1/sellers"))
                         .willReturn(WireMock.aResponse().withStatus(HttpStatus.OK).withHeader(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
@@ -92,16 +93,6 @@ class EdgeServerApplicationTests {
                 .uri("/v1/sellers/1")
                 .exchange()
                 .expectStatus().isUnauthorized();
-    }
-
-    @Data
-    static class Seller {
-        private Long id;
-        private String name;
-        private String email;
-        private String phone;
-        private String loginId;
-        private String password;
     }
 
 }
