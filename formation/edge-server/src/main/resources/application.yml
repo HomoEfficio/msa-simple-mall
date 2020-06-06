@@ -9,6 +9,17 @@ spring:
           uri: http://localhost:${upstream.monolith.port}/
           predicates:
             - Path=/v1/**
+  r2dbc:
+    url: r2dbc:postresql://localhost:5432
+    name: monolith-simple-mall
+    username: user
+    password: pwd
+    pool:
+      enabled: true
+      initial-size: 20
+      max-size: 50
+      max-idle-time: 20m
+      validation-query: SELECT 1
 
 upstream:
   monolith:
