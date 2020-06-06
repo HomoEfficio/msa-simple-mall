@@ -2,6 +2,7 @@ package io.homo_efficio.msa.simple_mall.formation.edge_server;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
+import io.homo_efficio.msa.simple_mall.formation.edge_server.auth.Customer;
 import io.homo_efficio.msa.simple_mall.formation.edge_server.auth.Seller;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,6 +92,47 @@ class EdgeServerApplicationTests {
 
         client.get()
                 .uri("/v1/sellers/1")
+                .exchange()
+                .expectStatus().isUnauthorized();
+    }
+
+
+    @DisplayName("인증 없이 Customer를 등록하면 200이 반환된다.")
+    @Test
+    void createCustomer() {
+
+        wireMockServer.stubFor(
+                WireMock.post(WireMock.urlEqualTo("/v1/customers"))
+                        .willReturn(WireMock.aResponse().withStatus(HttpStatus.OK).withHeader(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
+        );
+
+        Customer customer = new Customer(
+                null, "Hanmomhanda", "hanmomhanda@gmail.com", "010-8888-9999",
+                "22333", "도로명 주소 21", "도로명 주소 22", "상세주소 21",
+                "hanmomhanda", "password"
+        );
+
+
+        client.post().uri("/v1/customers")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(Mono.just(customer), Seller.class)
+                .exchange()
+                .expectStatus().isOk();
+    }
+
+    @DisplayName("인증 없이 Customer를 조회하면 401이 반환된다.")
+    @Test
+    void findCustomerWithoutAuthenticated() {
+
+        wireMockServer.stubFor(
+                WireMock.get(WireMock.urlEqualTo("/v1/customers/1"))
+                        .willReturn(WireMock.aResponse().withStatus(HttpStatus.OK))
+        );
+
+
+        client.get()
+                .uri("/v1/customers/1")
                 .exchange()
                 .expectStatus().isUnauthorized();
     }
