@@ -32,6 +32,7 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-contract-stub-runner'
     implementation 'org.springframework.data:spring-data-r2dbc'
     implementation 'io.r2dbc:r2dbc-postgresql'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
 
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
