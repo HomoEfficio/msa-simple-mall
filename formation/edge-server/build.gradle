@@ -29,6 +29,7 @@ dependencies {
     implementation 'de.codecentric:spring-boot-admin-starter-client'
     implementation 'de.codecentric:spring-boot-admin-starter-server'
     implementation 'org.springframework.cloud:spring-cloud-starter-gateway'
+    implementation 'org.springframework.cloud:spring-cloud-starter-contract-stub-runner'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'

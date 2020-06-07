@@ -6,6 +6,10 @@ spring:
     gateway:
       routes:
         - id: monolith-simple-mall
-          uri: http://localhost:8080/
+          uri: http://localhost:${upstream.monolith.port}/
           predicates:
             - Path=/v1/**
+
+upstream:
+  monolith:
+    port: 8080
