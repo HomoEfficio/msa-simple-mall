@@ -32,6 +32,16 @@ logging:
   level:
     io.homo_efficio: DEBUG
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - '*'
+  endpoint:
+    health:
+      show-details: always
+
 
 
 ---
