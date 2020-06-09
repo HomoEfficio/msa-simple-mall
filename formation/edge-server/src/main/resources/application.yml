@@ -2,11 +2,19 @@ server:
   port: 9000
 
 spring:
+  application:
+    name: edge-server
   cloud:
+    consul:
+      discovery:
+        instance-id: ${spring.application.name}.${random.value}
+    loadbalancer:
+      ribbon:
+        enabled: false
     gateway:
       routes:
         - id: monolith-simple-mall
-          uri: http://localhost:${upstream.monolith.port}/
+          uri: http://monolith-simple-mall:${upstream.monolith.port}/
           predicates:
             - Path=/v1/**
 
