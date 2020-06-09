@@ -11,6 +11,15 @@ spring.datasource:
   password: pwd
 
 spring:
+  application:
+    name: monolith-simple-mall
+  cloud:
+    consul:
+      discovery:
+        instance-id: ${spring.application.name}.${random.value}
+    loadbalancer:
+      ribbon:
+        enabled: false
   jpa:
     show-sql: true
     open-in-view: false
