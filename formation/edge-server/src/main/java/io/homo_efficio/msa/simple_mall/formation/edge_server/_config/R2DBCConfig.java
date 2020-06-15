@@ -27,7 +27,9 @@ public class R2DBCConfig extends AbstractR2dbcConfiguration {
         return ConnectionFactories.get(
                 ConnectionFactoryOptions.builder()
                         .option(DRIVER, "postgresql")
-                        .option(HOST, "localhost")
+                        // host이름(postgresql)은 docker-compose 에서 services 항목으로 지정한 PostgreSQL 서비스의 이름과 동일해야 함
+                        // 그 외 DB 이름 username, password 도 모두 docker-compose 내용과 맞아야 함
+                        .option(HOST, "postgresql")
                         .option(PORT, 5432)
                         .option(DATABASE, "monolith-simple-mall")
                         .option(USER, "user")

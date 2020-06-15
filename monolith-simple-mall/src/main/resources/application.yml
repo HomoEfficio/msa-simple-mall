@@ -6,7 +6,9 @@ server:
 spring.jpa.hibernate.ddl-auto: create
 
 spring.datasource:
-  url: jdbc:mysql://localhost:3306/monolith-simple-mall
+  # host이름(postgresql)은 docker-compose 에서 services 항목으로 지정한 PostgreSQL 서비스의 이름과 동일해야 함
+  # 그 외 DB 이름 username, password 도 모두 docker-compose 내용과 맞아야 함
+  url: jdbc:postgresql://postgresql:5432/monolith-simple-mall
   username: user
   password: pwd
 
