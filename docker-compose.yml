@@ -1,0 +1,66 @@
+version: '2.4'
+
+services:
+  consul-server-1:
+    image: consul:latest
+    container_name: consul-server-container-1
+    entrypoint:
+      - consul
+      - agent
+      - -server
+      - -ui
+      - -node=consul-server-node-1
+      - -bootstrap-expect=3
+      - -data-dir=/var/logs/consul
+      - -client=0.0.0.0
+    networks:
+      my-network:
+        aliases:
+          - consul-server-nw-alias-1
+    ports:
+      - "8500:8500"
+  consul-server-2:
+    image: consul:latest
+    container_name: consul-server-container-2
+    entrypoint:
+      - consul
+      - agent
+      - -server
+      - -node=consul-server-node-2
+      - -bootstrap-expect=3
+      - -data-dir=/var/logs/consul
+      - -retry-join=consul-server-1
+      - -client=0.0.0.0
+    networks:
+      my-network:
+        aliases:
+          - consul-server-nw-alias-2
+  consul-server-3:
+    image: consul:latest
+    container_name: consul-server-container-3
+    entrypoint:
+      - consul
+      - agent
+      - -server
+      - -node=consul-server-node-3
+      - -bootstrap-expect=3
+      - -data-dir=/var/logs/consul
+      - -retry-join=consul-server-1
+      - -client=0.0.0.0
+    networks:
+      my-network:
+        aliases:
+          - consul-server-nw-alias-3
+
+networks:
+  my-network:
+    name: my-network
+
+
+# docker-compose 명령
+# docker-compose build --force-rm: docker-compose 에 포함된 서비스의 이미지 생성, --force-rm 은 중간 이미지 항상 삭제
+# docker-compose up -d : docker-compose 에 포함된 서비스의 이미지에서 컨테이너 생성 및 실행. -d: daemon
+# docker-compose logs -f -t 컨테이너ID : -d 로 실행돼서 볼 수 없는 로그를 호스트 화면에 표시
+# docker-compose stop : docker-compose 로 실행된 컨테이너 중지
+# docker-compose down : docker-compose stop + 컨테이너 삭제
+# docker-compose up -d --scale {{서비스이름}}=3: {{서비스이름}} 인스턴스 3개 띄움
