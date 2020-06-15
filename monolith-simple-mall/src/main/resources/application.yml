@@ -1,4 +1,10 @@
 server:
+  port: 8443
+  ssl:
+    key-store-type: PKCS12
+    key-store: classpath:keystore/monolith.p12
+    key-store-password: monolith
+    key-alias: localhost
   tomcat:
     threads:
       max: 1
@@ -19,6 +25,8 @@ spring:
     consul:
       discovery:
         instance-id: ${spring.application.name}.${random.value}
+        scheme: https
+        health-check-tls-skip-verify: true
     loadbalancer:
       ribbon:
         enabled: false

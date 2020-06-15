@@ -14,7 +14,7 @@ spring:
     gateway:
       routes:
         - id: monolith-simple-mall
-          uri: http://monolith-simple-mall:${upstream.monolith.port}/
+          uri: https://monolith-simple-mall:${upstream.monolith.port}/
           predicates:
             - Path=/v1/**
 
@@ -30,4 +30,4 @@ management:
 
 upstream:
   monolith:
-    port: 8080
+    port: 8443
