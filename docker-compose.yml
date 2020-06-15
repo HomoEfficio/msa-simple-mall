@@ -67,6 +67,24 @@ services:
       interval: 20s
       timeout: 5s
       retries: 10
+  edge-server:
+    build: formation/edge-server/
+    mem_limit: 200m
+    networks:
+      - my-network
+    ports:
+      - "9000:9000"
+    depends_on:
+      - consul-server-1
+      - postgresql
+  monolith-simple-mall:
+    build: monolith-simple-mall/
+    mem_limit: 200m
+    networks:
+      - my-network
+    depends_on:
+      - consul-server-2
+      - postgresql
 
 networks:
   my-network:
