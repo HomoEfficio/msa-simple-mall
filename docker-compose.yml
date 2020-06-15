@@ -51,6 +51,22 @@ services:
       my-network:
         aliases:
           - consul-server-nw-alias-3
+  postgresql:
+    image: postgres:12-alpine
+    container_name: postgres
+    networks:
+      - my-network
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=monolith-simple-mall
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=pwd
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d monolith-simple-mall"]
+      interval: 20s
+      timeout: 5s
+      retries: 10
 
 networks:
   my-network:
