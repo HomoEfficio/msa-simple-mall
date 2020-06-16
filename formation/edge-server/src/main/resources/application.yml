@@ -17,7 +17,7 @@ spring:
           use-insecure-trust-manager: true
       routes:
         - id: monolith-simple-mall
-          uri: https://monolith-simple-mall:${upstream.monolith.port}/
+          uri: lb://monolith-simple-mall:${upstream.monolith.port}/
           predicates:
             - Path=/v1/**
 

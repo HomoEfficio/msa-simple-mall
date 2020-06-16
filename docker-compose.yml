@@ -77,7 +77,7 @@ services:
     depends_on:
       - consul-server-1
       - postgresql
-  monolith-simple-mall:
+  monolith-simple-mall-app:
     build: monolith-simple-mall/
     mem_limit: 200m
     networks:
