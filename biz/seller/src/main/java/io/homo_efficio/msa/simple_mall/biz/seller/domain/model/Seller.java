@@ -2,15 +2,21 @@ package io.homo_efficio.msa.simple_mall.biz.seller.domain.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.math.BigInteger;
 
 /**
  * @author homo.efficio@gmail.com
  * created on 2020-06-29
  */
+@Document
 @Getter
 public class Seller {
 
-    private Long id;
+    @Id
+    private BigInteger id;
 
     @Setter
     private String name;
@@ -26,7 +32,7 @@ public class Seller {
     @Setter
     private String phone;
 
-    public Seller(Long id, String name, String email, String loginId, String password, String phone) {
+    public Seller(BigInteger id, String name, String email, String loginId, String password, String phone) {
         this.id = id;
         this.name = name;
         this.email = email;
