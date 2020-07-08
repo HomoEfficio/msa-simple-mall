@@ -16,7 +16,7 @@ import java.math.BigInteger;
 public class Seller {
 
     @Id
-    private BigInteger id;
+    private String id;
 
     @Setter
     private String name;
@@ -32,7 +32,7 @@ public class Seller {
     @Setter
     private String phone;
 
-    public Seller(BigInteger id, String name, String email, String loginId, String password, String phone) {
+    public Seller(String id, String name, String email, String loginId, String password, String phone) {
         this.id = id;
         this.name = name;
         this.email = email;
