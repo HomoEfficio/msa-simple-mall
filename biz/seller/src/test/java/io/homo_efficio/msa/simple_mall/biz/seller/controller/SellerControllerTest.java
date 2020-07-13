@@ -20,6 +20,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Objects;
 import java.util.stream.Stream;
 
 @SpringBootTest
@@ -70,7 +71,7 @@ class SellerControllerTest {
 
     @DisplayName("판매자 정보 수정: name 이 [마이크로서비스학생1]인 판매자 이름을 [대박기원판매자1]로 변경한다.")
     @Test
-    void 판매자_수정() {
+    void 판매자_수정_01() {
         FluxExchangeResult<SellerOut> sellerOutFluxExchangeResult = client
                 .post()
                 .uri("/sellers")
@@ -83,23 +84,38 @@ class SellerControllerTest {
 
         Flux<SellerOut> responseBody = sellerOutFluxExchangeResult.getResponseBody();
         SellerOut sellerOut = responseBody.blockFirst();
-        String loginId = sellerOut.getLoginId();
+        String sellerId = Objects.requireNonNull(sellerOut).getId();
 
         client
                 .put()
-                .uri("/sellers?loginId=" + loginId)
+                .uri("/sellers/" + sellerId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .body(Mono.just(new SellerIn("대박기원판매자1", "user1@test.com", "010-1111-1111", "user1", "p123456")), Seller.class)
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()
-                .jsonPath("loginId").isEqualTo(loginId)
+                .jsonPath("id").isEqualTo(sellerId)
+                .jsonPath("loginId").isEqualTo("user1")
                 .jsonPath("name").isEqualTo("대박기원판매자1")
                 .jsonPath("email").isEqualTo("user1@test.com")
                 .jsonPath("phone").isEqualTo("010-1111-1111")
         ;
+    }
 
+    @DisplayName("판매자 정보 수정: 존재하지 않는 sellerId로 판매자 정보 수정 시 500 을 반환한다.")
+    @Test
+    void 판매자_수정_02() {
+        String dummySellerId = "-----";
 
+            client
+                    .put()
+                    .uri("/sellers/" + dummySellerId)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .body(Mono.just(new SellerIn("대박기원판매자1", "user1@test.com", "010-1111-1111", "user1", "p123456")), Seller.class)
+                    .exchange()
+                    .expectStatus().is5xxServerError()
+            ;
     }
 }

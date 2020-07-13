@@ -5,10 +5,7 @@ import io.homo_efficio.msa.simple_mall.biz.seller.dto.SellerOut;
 import io.homo_efficio.msa.simple_mall.biz.seller.service.SellerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
@@ -28,5 +25,10 @@ public class SellerController {
     @PostMapping
     public Mono<SellerOut> create(@Valid @RequestBody Mono<SellerIn> sellerIn) {
         return sellerService.create(sellerIn);
+    }
+
+    @PutMapping("/{id}")
+    public Mono<SellerOut> update(@PathVariable String id, @Valid @RequestBody Mono<SellerIn> sellerIn) {
+        return sellerService.update(id, sellerIn);
     }
 }

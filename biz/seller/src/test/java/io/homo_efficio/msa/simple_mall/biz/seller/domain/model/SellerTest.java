@@ -1,6 +1,7 @@
 package io.homo_efficio.msa.simple_mall.biz.seller.domain.model;
 
 import io.homo_efficio.msa.simple_mall.biz.seller.domain.repository.SellerRepository;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;

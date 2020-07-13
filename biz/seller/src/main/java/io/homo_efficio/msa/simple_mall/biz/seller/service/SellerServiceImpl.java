@@ -1,5 +1,6 @@
 package io.homo_efficio.msa.simple_mall.biz.seller.service;
 
+import io.homo_efficio.msa.simple_mall.biz.seller.domain.model.Seller;
 import io.homo_efficio.msa.simple_mall.biz.seller.dto.SellerIn;
 import io.homo_efficio.msa.simple_mall.biz.seller.dto.SellerOut;
 import lombok.RequiredArgsConstructor;
@@ -7,6 +8,8 @@ import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
+
+import java.util.function.Function;
 
 /**
  * @author homo.efficio@gmail.com
@@ -26,5 +29,21 @@ public class SellerServiceImpl implements SellerService {
                         sellerIn.map(s -> s.toEntityWithPasswordEncoder(passwordEncoder))
                 )
         );
+    }
+
+    @Override
+    public Mono<SellerOut> update(String sellerId, Mono<SellerIn> sellerIn) {
+        Mono<Seller> sellerMono = template.findById(sellerId, Seller.class)
+                .switchIfEmpty(Mono.error(() -> new RuntimeException(sellerId + "가 없습니다.")))
+                .flatMap(updateEntityWith(sellerIn));
+
+        return SellerOut.from(template.save(sellerMono));
+    }
+
+    private Function<Seller, Mono<? extends Seller>> updateEntityWith(Mono<SellerIn> sellerIn) {
+        return seller -> sellerIn.map(s -> {
+            s.updateEntityWithPasswordEncoder(seller, passwordEncoder);
+            return seller;
+        });
     }
 }
