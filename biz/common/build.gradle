@@ -1,0 +1,39 @@
+plugins {
+    id 'java-library'
+}
+
+group = 'io.homo_efficio'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '14'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework:spring-core:5.2.7.RELEASE'
+    implementation 'org.springframework:spring-web:5.2.7.RELEASE'
+    implementation 'org.springframework.boot:spring-boot:2.3.1.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux:2.3.1.RELEASE'
+    implementation 'org.slf4j:slf4j-api:1.7.30'
+
+    implementation'com.fasterxml.jackson.core:jackson-annotations:2.11.1'
+    implementation'com.fasterxml.jackson.core:jackson-databind:2.11.1'
+    implementation 'org.projectlombok:lombok:1.18.12'
+
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor:2.3.1.RELEASE'
+    annotationProcessor 'org.projectlombok:lombok:1.18.12'
+    testImplementation('org.springframework.boot:spring-boot-starter-test:2.3.1.RELEASE') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
