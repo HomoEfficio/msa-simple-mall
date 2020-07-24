@@ -1,5 +1,6 @@
 package io.homo_efficio.msa.simple_mall.biz.seller.service;
 
+import io.homo_efficio.biz.common.exception.ResourceNotFoundException;
 import io.homo_efficio.msa.simple_mall.biz.seller.domain.model.Seller;
 import io.homo_efficio.msa.simple_mall.biz.seller.dto.SellerIn;
 import io.homo_efficio.msa.simple_mall.biz.seller.dto.SellerOut;
@@ -34,7 +35,7 @@ public class SellerServiceImpl implements SellerService {
     @Override
     public Mono<SellerOut> update(String sellerId, Mono<SellerIn> sellerIn) {
         Mono<Seller> sellerMono = template.findById(sellerId, Seller.class)
-                .switchIfEmpty(Mono.error(() -> new RuntimeException(sellerId + "가 없습니다.")))
+                .switchIfEmpty(Mono.error(() -> new ResourceNotFoundException(Seller.class, sellerId)))
                 .flatMap(updateEntityWith(sellerIn));
 
         return SellerOut.from(template.save(sellerMono));

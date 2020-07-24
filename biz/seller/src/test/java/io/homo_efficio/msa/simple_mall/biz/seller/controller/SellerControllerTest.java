@@ -103,7 +103,7 @@ class SellerControllerTest {
         ;
     }
 
-    @DisplayName("판매자 정보 수정: 존재하지 않는 sellerId로 판매자 정보 수정 시 500 을 반환한다.")
+    @DisplayName("판매자 정보 수정: 존재하지 않는 sellerId로 판매자 정보 수정 시 404 를 반환한다.")
     @Test
     void 판매자_수정_02() {
         String dummySellerId = "-----";
@@ -115,7 +115,7 @@ class SellerControllerTest {
                     .accept(MediaType.APPLICATION_JSON)
                     .body(Mono.just(new SellerIn("대박기원판매자1", "user1@test.com", "010-1111-1111", "user1", "p123456")), Seller.class)
                     .exchange()
-                    .expectStatus().is5xxServerError()
+                    .expectStatus().isNotFound()
             ;
     }
 }
