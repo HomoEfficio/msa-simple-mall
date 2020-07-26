@@ -118,4 +118,36 @@ class SellerControllerTest {
                     .expectStatus().isNotFound()
             ;
     }
+
+    @DisplayName("판매자 계정을 삭제하면 데이터를 삭제하고 삭제된 판매자 정보를 반환한다.")
+    @Test
+    void 판매자_삭제() {
+        FluxExchangeResult<SellerOut> sellerOutFluxExchangeResult = client
+                .post()
+                .uri("/sellers")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(Mono.just(new SellerIn("삭제될판매자1", "user1@test.com", "010-1111-1111", "user1", "p123456")), Seller.class)
+                .exchange()
+                .expectStatus().isOk()
+                .returnResult(SellerOut.class);
+
+        Flux<SellerOut> responseBody = sellerOutFluxExchangeResult.getResponseBody();
+        SellerOut sellerOut = responseBody.blockFirst();
+        String sellerId = Objects.requireNonNull(sellerOut).getId();
+
+        client
+                .delete()
+                .uri("/sellers/" + sellerId)
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("id").isEqualTo(sellerId)
+                .jsonPath("loginId").isEqualTo("user1")
+                .jsonPath("name").isEqualTo("삭제될판매자1")
+                .jsonPath("email").isEqualTo("user1@test.com")
+                .jsonPath("phone").isEqualTo("010-1111-1111")
+        ;
+    }
 }
