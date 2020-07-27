@@ -31,4 +31,9 @@ public class SellerController {
     public Mono<SellerOut> update(@PathVariable String id, @Valid @RequestBody Mono<SellerIn> sellerIn) {
         return sellerService.update(id, sellerIn);
     }
+
+    @DeleteMapping("/{id}")
+    public Mono<SellerOut> delete(@PathVariable String id) {
+        return sellerService.delete(id);
+    }
 }

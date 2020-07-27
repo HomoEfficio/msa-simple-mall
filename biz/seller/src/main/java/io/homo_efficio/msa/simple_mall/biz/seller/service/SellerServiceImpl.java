@@ -47,4 +47,13 @@ public class SellerServiceImpl implements SellerService {
             return seller;
         });
     }
+
+    @Override
+    public Mono<SellerOut> delete(String sellerId) {
+
+        return SellerOut.from(
+                template.findById(sellerId, Seller.class)
+                        .switchIfEmpty(Mono.error(() -> new ResourceNotFoundException(Seller.class, sellerId)))
+                        .doOnNext(template::remove));
+    }
 }

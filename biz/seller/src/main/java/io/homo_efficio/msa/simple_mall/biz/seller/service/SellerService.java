@@ -12,4 +12,5 @@ public interface SellerService {
 
     Mono<SellerOut> create(Mono<SellerIn> sellerIn);
     Mono<SellerOut> update(String sellerId, Mono<SellerIn> sellerIn);
+    Mono<SellerOut> delete(String sellerId);
 }
