@@ -36,11 +36,11 @@ public class SellerServiceImpl implements SellerService {
 
     @Override
     public Mono<SellerOut> update(String sellerId, Mono<SellerIn> sellerIn) {
-        log.info(Thread.currentThread().getName() + " in update() - 1");
+//        log.info(Thread.currentThread().getName() + " in update() - 1");
         Mono<Seller> sellerMono = template.findById(sellerId, Seller.class)
 //                .switchIfEmpty(Mono.error(() -> new ResourceNotFoundException(Seller.class, sellerId)))
                 .switchIfEmpty(Mono.error(() -> {
-                    log.info(Thread.currentThread().getName() + " in update() - 2");
+//                    log.info(Thread.currentThread().getName() + " in update() - 2");
                     return new ResourceNotFoundException(Seller.class, sellerId);
                 }))
                 .flatMap(updateEntityWith(sellerIn));
@@ -49,9 +49,9 @@ public class SellerServiceImpl implements SellerService {
     }
 
     private Function<Seller, Mono<? extends Seller>> updateEntityWith(Mono<SellerIn> sellerIn) {
-        log.info(Thread.currentThread().getName() + " in updateEntityWith() - 3");
+//        log.info(Thread.currentThread().getName() + " in updateEntityWith() - 3");
         return seller -> sellerIn.map(s -> {
-            log.info(Thread.currentThread().getName() + " in updateEntityWith() - 4");
+//            log.info(Thread.currentThread().getName() + " in updateEntityWith() - 4");
             s.updateEntityWithPasswordEncoder(seller, passwordEncoder);
             return seller;
         });
