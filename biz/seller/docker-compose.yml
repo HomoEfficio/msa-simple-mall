@@ -1,0 +1,29 @@
+version: '2.4'
+
+services:
+  mongodb:
+    image: mongo
+    container_name: mongo_container_seller
+    environment:
+      - MONGO_INITDB_DATABASE=msa_simple_mall
+      - MONGO_INITDB_ROOT_USERNAME=msaBizSeller
+      - MONGO_INITDB_ROOT_PASSWORD=MsaBizSeller1!
+      - MONGO_DAT_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
+    volumes:
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    ports:
+    - '27017-27019:27017-27019'
+
+#networks:
+#  my-network:
+#    name: my-network
+
+
+# docker-compose 명령
+# docker-compose build --force-rm: docker-compose 에 포함된 서비스의 이미지 생성, --force-rm 은 중간 이미지 항상 삭제
+# docker-compose up -d : docker-compose 에 포함된 서비스의 이미지에서 컨테이너 생성 및 실행. -d: daemon
+# docker-compose logs -f -t 컨테이너ID : -d 로 실행돼서 볼 수 없는 로그를 호스트 화면에 표시
+# docker-compose stop : docker-compose 로 실행된 컨테이너 중지
+# docker-compose down : docker-compose stop + 컨테이너 삭제
+# docker-compose up -d --scale {{서비스이름}}=3: {{서비스이름}} 인스턴스 3개 띄움
