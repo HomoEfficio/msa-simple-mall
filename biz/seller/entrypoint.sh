@@ -1,5 +1,4 @@
 #!/bin/sh
 
 java --version
-java -jar app.jar
-
+SPRING_PROFILES_ACTIVE=docker java -jar app.jar
