@@ -4,12 +4,6 @@ services:
   mongodb:
     image: mongo
     container_name: mongo_container_seller
-    environment:
-      - MONGO_INITDB_DATABASE=msa_simple_mall
-      - MONGO_INITDB_ROOT_USERNAME=msaBizSeller
-      - MONGO_INITDB_ROOT_PASSWORD=MsaBizSeller1!
-      - MONGO_DAT_DIR=/data/db
-      - MONGO_LOG_DIR=/dev/null
     volumes:
       - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
     ports:
