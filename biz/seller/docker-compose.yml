@@ -7,7 +7,14 @@ services:
     volumes:
       - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
     ports:
-    - '27017-27019:27017-27019'
+      - '27017-27019:27017-27019'
+  seller:
+    build: ./
+    container_name: biz_seller
+    ports:
+      - '8080:8080'
+    depends_on:
+      - mongodb
 
 #networks:
 #  my-network:
