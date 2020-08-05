@@ -8,5 +8,7 @@ spring:
       host: mongo_container_seller
       port: 27017
       database: msa_simple_mall
+      username: msaBizSeller
+      password: MsaBizSeller1!
 
 spring.autoconfigure.exclude: org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration
