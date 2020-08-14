@@ -2,6 +2,7 @@ package io.homo_efficio.msa.simple_mall.biz.seller.service;
 
 import io.homo_efficio.biz.common.exception.ResourceNotFoundException;
 import io.homo_efficio.msa.simple_mall.biz.seller.domain.model.Seller;
+import io.homo_efficio.msa.simple_mall.biz.seller.domain.repository.SellerRepository;
 import io.homo_efficio.msa.simple_mall.biz.seller.dto.SellerIn;
 import io.homo_efficio.msa.simple_mall.biz.seller.dto.SellerOut;
 import lombok.RequiredArgsConstructor;
@@ -23,45 +24,46 @@ import java.util.function.Function;
 public class SellerServiceImpl implements SellerService {
 
     private final ReactiveMongoTemplate template;
+    private final SellerRepository sellerRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public Mono<SellerOut> create(Mono<SellerIn> sellerIn) {
+    public Mono<SellerOut> create(SellerIn sellerIn) {
         return SellerOut.from(
-                template.save(
-                        sellerIn.map(s -> s.toEntityWithPasswordEncoder(passwordEncoder))
-                )
+                sellerRepository.save(sellerIn.toEntityWithPasswordEncoder(passwordEncoder))
         );
     }
 
+
     @Override
-    public Mono<SellerOut> update(String sellerId, Mono<SellerIn> sellerIn) {
-//        log.info(Thread.currentThread().getName() + " in update() - 1");
-        Mono<Seller> sellerMono = template.findById(sellerId, Seller.class)
-//                .switchIfEmpty(Mono.error(() -> new ResourceNotFoundException(Seller.class, sellerId)))
+    public Mono<SellerOut> update(String sellerId, SellerIn sellerIn) {
+        log.info(Thread.currentThread().getName() + " in update() - 1");
+        Mono<Seller> sellerMono = sellerRepository.findById(sellerId)
                 .switchIfEmpty(Mono.error(() -> {
-//                    log.info(Thread.currentThread().getName() + " in update() - 2");
+                    log.info(Thread.currentThread().getName() + " in update() - 2");
                     return new ResourceNotFoundException(Seller.class, sellerId);
                 }))
-                .flatMap(updateEntityWith(sellerIn));
+                .map(updateEntityWith(sellerIn));
 
         return SellerOut.from(template.save(sellerMono));
     }
 
-    private Function<Seller, Mono<? extends Seller>> updateEntityWith(Mono<SellerIn> sellerIn) {
-//        log.info(Thread.currentThread().getName() + " in updateEntityWith() - 3");
-        return seller -> sellerIn.map(s -> {
-//            log.info(Thread.currentThread().getName() + " in updateEntityWith() - 4");
-            s.updateEntityWithPasswordEncoder(seller, passwordEncoder);
+    private Function<Seller, ? extends Seller> updateEntityWith(SellerIn sellerIn) {
+        log.info(Thread.currentThread().getName() + " in updateEntityWith() - 3");
+        return seller -> {
+        log.info(Thread.currentThread().getName() + " in updateEntityWith() - 4");
+            seller.setName(sellerIn.getName());
+            seller.setEmail(sellerIn.getEmail());
+            seller.setPhone(sellerIn.getPhone());
+            seller.setPassword(sellerIn.getPassword());
             return seller;
-        });
+        };
     }
 
     @Override
     public Mono<SellerOut> delete(String sellerId) {
-
         return SellerOut.from(
-                template.findById(sellerId, Seller.class)
+                sellerRepository.findById(sellerId)
                         .switchIfEmpty(Mono.error(() -> new ResourceNotFoundException(Seller.class, sellerId)))
                         .doOnNext(template::remove));
     }

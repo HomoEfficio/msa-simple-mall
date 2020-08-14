@@ -23,12 +23,12 @@ public class SellerController {
     private final SellerService sellerService;
 
     @PostMapping
-    public Mono<SellerOut> create(@Valid @RequestBody Mono<SellerIn> sellerIn) {
+    public Mono<SellerOut> create(@Valid @RequestBody SellerIn sellerIn) {
         return sellerService.create(sellerIn);
     }
 
     @PutMapping("/{id}")
-    public Mono<SellerOut> update(@PathVariable String id, @Valid @RequestBody Mono<SellerIn> sellerIn) {
+    public Mono<SellerOut> update(@PathVariable String id, @Valid @RequestBody SellerIn sellerIn) {
         return sellerService.update(id, sellerIn);
     }
 
