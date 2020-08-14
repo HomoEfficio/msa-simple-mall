@@ -29,6 +29,7 @@ public class SellerController {
 
     @PutMapping("/{id}")
     public Mono<SellerOut> update(@PathVariable String id, @Valid @RequestBody SellerIn sellerIn) {
+        log.info(Thread.currentThread().getName() + " in controller.update() - 0");
         return sellerService.update(id, sellerIn);
     }
 
