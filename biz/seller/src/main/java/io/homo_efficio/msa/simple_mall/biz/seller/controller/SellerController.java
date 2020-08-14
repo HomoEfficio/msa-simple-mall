@@ -36,4 +36,9 @@ public class SellerController {
     public Mono<SellerOut> delete(@PathVariable String id) {
         return sellerService.delete(id);
     }
+
+    @GetMapping("/{id}")
+    public Mono<SellerOut> get(@PathVariable String id) {
+        return sellerService.findById(id);
+    }
 }

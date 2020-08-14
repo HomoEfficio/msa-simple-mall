@@ -67,4 +67,15 @@ public class SellerServiceImpl implements SellerService {
                         .switchIfEmpty(Mono.error(() -> new ResourceNotFoundException(Seller.class, sellerId)))
                         .doOnNext(template::remove));
     }
+
+    @Override
+    public Mono<SellerOut> findById(String sellerId) {
+        return SellerOut.from(
+                sellerRepository.findById(sellerId)
+                    .switchIfEmpty(Mono.error(() -> {
+                        log.info(Thread.currentThread().getName() + " in update() - 2");
+                        return new ResourceNotFoundException(Seller.class, sellerId);
+                    }))
+        );
+    }
 }
