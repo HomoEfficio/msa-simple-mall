@@ -150,4 +150,35 @@ class SellerControllerTest {
                 .jsonPath("phone").isEqualTo("010-1111-1111")
         ;
     }
+
+    @DisplayName("판매자 정보 조회: id로 판매자를 조회한다.")
+    @Test
+    void 판매자_조회_01() {
+        FluxExchangeResult<SellerOut> sellerOutFluxExchangeResult = client
+                .post()
+                .uri("/sellers")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(Mono.just(new SellerIn("마이크로서비스학생1", "user1@test.com", "010-1111-1111", "user1", "p123456")), Seller.class)
+                .exchange()
+                .expectStatus().isOk()
+                .returnResult(SellerOut.class);
+
+        Flux<SellerOut> responseBody = sellerOutFluxExchangeResult.getResponseBody();
+        SellerOut sellerOut = responseBody.blockFirst();
+        String sellerId = Objects.requireNonNull(sellerOut).getId();
+
+        client
+                .get()
+                .uri("/sellers/" + sellerId)
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("id").isEqualTo(sellerId)
+                .jsonPath("loginId").isEqualTo("user1")
+                .jsonPath("name").isEqualTo("마이크로서비스학생1")
+                .jsonPath("email").isEqualTo("user1@test.com")
+                .jsonPath("phone").isEqualTo("010-1111-1111");
+    }
 }
