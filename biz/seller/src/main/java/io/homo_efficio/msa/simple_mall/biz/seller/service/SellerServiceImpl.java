@@ -65,7 +65,8 @@ public class SellerServiceImpl implements SellerService {
         return SellerOut.from(
                 sellerRepository.findById(sellerId)
                         .switchIfEmpty(Mono.error(() -> new ResourceNotFoundException(Seller.class, sellerId)))
-                        .doOnNext(template::remove));
+                        .doOnNext(seller -> sellerRepository.delete(seller).subscribe())
+        );
     }
 
     @Override
@@ -73,7 +74,7 @@ public class SellerServiceImpl implements SellerService {
         return SellerOut.from(
                 sellerRepository.findById(sellerId)
                     .switchIfEmpty(Mono.error(() -> {
-                        log.info(Thread.currentThread().getName() + " in update() - 2");
+                        log.info(Thread.currentThread().getName() + " in findById() - 1");
                         return new ResourceNotFoundException(Seller.class, sellerId);
                     }))
         );
