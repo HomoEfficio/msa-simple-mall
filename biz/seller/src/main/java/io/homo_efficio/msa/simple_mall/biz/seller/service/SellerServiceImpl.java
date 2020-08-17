@@ -62,10 +62,13 @@ public class SellerServiceImpl implements SellerService {
 
     @Override
     public Mono<SellerOut> delete(String sellerId) {
+//        return SellerOut.from(
+//                sellerRepository.findById(sellerId)
+//                        .switchIfEmpty(Mono.error(() -> new ResourceNotFoundException(Seller.class, sellerId)))
+//                        .doOnNext(seller -> sellerRepository.delete(seller).subscribe())
+//        );
         return SellerOut.from(
-                sellerRepository.findById(sellerId)
-                        .switchIfEmpty(Mono.error(() -> new ResourceNotFoundException(Seller.class, sellerId)))
-                        .doOnNext(seller -> sellerRepository.delete(seller).subscribe())
+                sellerRepository.deleteSellerById(sellerId)
         );
     }
 
