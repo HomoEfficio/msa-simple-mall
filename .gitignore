@@ -12,3 +12,5 @@ out
 # jenv
 .java-version
 
+# etc
+.DS_store
