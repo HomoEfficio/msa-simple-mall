@@ -4,6 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.homo_efficio.msa.simple_mall.biz.seller.domain.model.Seller;
 import io.homo_efficio.msa.simple_mall.biz.seller.dto.SellerIn;
 import io.homo_efficio.msa.simple_mall.biz.seller.dto.SellerOut;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.core.StringContains;
+import org.hamcrest.text.IsEqualIgnoringCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -47,6 +51,7 @@ class SellerControllerTest {
                 .jsonPath("name").isEqualTo(name)
                 .jsonPath("email").isEqualTo(email)
                 .jsonPath("phone").isEqualTo(phone)
+                .consumeWith(System.out::println)
         ;
     }
 
@@ -100,6 +105,7 @@ class SellerControllerTest {
                 .jsonPath("name").isEqualTo("대박기원판매자1")
                 .jsonPath("email").isEqualTo("user1@test.com")
                 .jsonPath("phone").isEqualTo("010-1111-1111")
+                .consumeWith(System.out::println)
         ;
     }
 
@@ -116,6 +122,11 @@ class SellerControllerTest {
                     .body(Mono.just(new SellerIn("대박기원판매자1", "user1@test.com", "010-1111-1111", "user1", "p123456")), Seller.class)
                     .exchange()
                     .expectStatus().isNotFound()
+                    .expectBody()
+                    .jsonPath("errorCode").isEqualTo("COMMON_003")
+                    .jsonPath("message").isNotEmpty()
+                    .jsonPath("message").value(new StringContains("Seller 는 존재하지 않습니다."))
+                    .consumeWith(System.out::println)
             ;
     }
 
@@ -148,6 +159,7 @@ class SellerControllerTest {
                 .jsonPath("name").isEqualTo("삭제될판매자1")
                 .jsonPath("email").isEqualTo("user1@test.com")
                 .jsonPath("phone").isEqualTo("010-1111-1111")
+                .consumeWith(System.out::println)
         ;
     }
 
@@ -179,6 +191,8 @@ class SellerControllerTest {
                 .jsonPath("loginId").isEqualTo("user1")
                 .jsonPath("name").isEqualTo("마이크로서비스학생1")
                 .jsonPath("email").isEqualTo("user1@test.com")
-                .jsonPath("phone").isEqualTo("010-1111-1111");
+                .jsonPath("phone").isEqualTo("010-1111-1111")
+                .consumeWith(System.out::println)
+        ;
     }
 }
